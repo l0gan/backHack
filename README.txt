@@ -4,7 +4,7 @@ backHack
 
 by: Kirk Hayes(l0gan)
 
-This project is because I was tired of having to be rooted to hack my apps.  For this to work, you must have drivers for your phone installed.  This includes ADB and ABE to let everything work.  That may change....
+This project is because I was tired of having to be rooted to hack my apps.  For this to work, you must have drivers for your phone installed.  Works well using Mobisec distribution.  Must install pax (sudo apt-get install pax) and adb (installed on mobiesec already).
 
 To run:
 
