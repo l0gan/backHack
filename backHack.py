@@ -100,7 +100,7 @@ while True:
 	elif selection =="99":
 		cls()
 		print("Cleaning Up")
-		os.system("echo This is only supported on Linux or Cygwin currently" if os.name == 'nt' else "rm fileList.txt "+ appName + "*")
+		os.system("echo This is only supported on Linux or Cygwin currently" if os.name == 'nt' else "rm fileList.txt "+ appName + "*" if appName != '' else "echo ")
 		os.system("echo This is only supported on Linux or Cygwin currently" if os.name == 'nt' else "rm -rf apps")
 		break
 	else:
