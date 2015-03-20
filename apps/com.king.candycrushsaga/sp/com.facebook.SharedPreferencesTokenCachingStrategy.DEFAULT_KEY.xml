@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
-<map>
-    <string name="com.facebook.TokenCachingStrategy.Permissions">{&quot;value&quot;:[&quot;email&quot;,&quot;share_item&quot;,&quot;publish_actions&quot;,&quot;user_friends&quot;,&quot;basic_info&quot;],&quot;valueType&quot;:&quot;stringList&quot;}</string>
-    <string name="com.facebook.TokenCachingStrategy.ExpirationDate">{&quot;value&quot;:1411086608000,&quot;valueType&quot;:&quot;long&quot;}</string>
-    <string name="com.facebook.TokenCachingStrategy.Token">{&quot;value&quot;:&quot;CAACZCwCGi5JABACZBIXyyDZAWu2NUbxRB19ZCy6iKfs5lXezgb4BbPlufxRZB3ZCA8ZBrfPlD91dKKvOPNQPX8eiZCBLmEhAS6Va3G1zAjB5HaZBL4Tu8BCgeTOV0l4C5JemHk6WZA3yWKBASlaheBacUGEQZAZAAZBfhkwMO4wawF5pTNFUeOEQNVuMHvEWab9DItIW9zMP8tmbVlTuACvZCNpaU5Mw09P4CLGqwVZB7rnBf22AgZDZD&quot;,&quot;valueType&quot;:&quot;string&quot;}</string>
-    <string name="com.facebook.TokenCachingStrategy.LastRefreshDate">{&quot;value&quot;:1405968172995,&quot;valueType&quot;:&quot;long&quot;}</string>
-    <string name="com.facebook.TokenCachingStrategy.AccessTokenSource">{&quot;value&quot;:&quot;FACEBOOK_APPLICATION_SERVICE&quot;,&quot;valueType&quot;:&quot;enum&quot;,&quot;enumType&quot;:&quot;com.facebook.AccessTokenSource&quot;}</string>
-</map>
