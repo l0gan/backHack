@@ -38,7 +38,7 @@ while True:
 			selection=raw_input("Please select an option:")
 			if selection == "1":
 				cls()
-				os.system("adb.exe shell pm list packages" if os.name == 'nt' else "./adb.exe shell pm list packages")
+				os.system("adb.exe shell pm list packages" if os.name == 'nt' else "adb shell pm list packages")
 				print("Review the preceding list then use option 2 to type in the name of the package")
 			elif selection == "2":
 				cls()
@@ -56,7 +56,7 @@ while True:
 		cls()
 		if appName:
 			print("Backing up " + appName)
-			os.system("adb.exe backup -f " + appName + ".ab " + appName if os.name == 'nt' else "./adb.exe backup -f " + appName + ".ab " + appName)
+			os.system("adb.exe backup -f " + appName + ".ab " + appName if os.name == 'nt' else "adb backup -f " + appName + ".ab " + appName)
 		else:
 			print("You have not selected an app.  Please use option 1 to set your app.")
 		
@@ -93,7 +93,7 @@ while True:
 		cls()
 		if appName:
 			print("Restoring " + appName)
-			os.system("adb.exe restore " + appName + "-rest.ab" if os.name == 'nt' else "./adb.exe restore " + appName + "-rest.ab")
+			os.system("adb.exe restore " + appName + "-rest.ab" if os.name == 'nt' else "adb restore " + appName + "-rest.ab")
 		else:
 			print("You have not selected an app.  Please use option 1 to set your app.")
 		
