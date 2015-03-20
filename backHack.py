@@ -6,6 +6,7 @@ def cls():
 	os.system('cls' if os.name == 'nt' else 'clear')
 
 appName = ''
+andVer = ''
 
 
 mainMenu = {}
@@ -14,6 +15,7 @@ mainMenu['2']="Backup App"
 mainMenu['3']="Extract App"
 mainMenu['4']="Repack App"
 mainMenu['5']="Restore App"
+mainMenu['6']="Set Android Version"
 mainMenu['99']="Exit"
 cls()
 while True:
@@ -77,30 +79,64 @@ while True:
 			print("You have not selected an app.  Please use option 1 to set your app.")
 	elif selection == "4":
 		cls()
-		if appName:
-			print("Repacking " + appName)
-			os.system("cat fileList.txt | pax -wd > " + appName +"-rest.tar")
-			#tar = tarfile.open(appName + "-rest.tar", "w", format=tarfile.USTAR_FORMAT)
-			#for name in ["apps"]:
-			#	tar.add(name)
-			#tar.close()
-			os.system("java -jar abe.jar pack " + appName + "-rest.tar " + appName + "-rest.ab")
-			cls()
-			print("Repacking complete.  You can now restore your backup file")
+		if andVer == '':
+			print("Please set your Android version before repacking")
 		else:
-			print("You have not selected an app.  Please use option 1 to set your app.")
+			if appName:
+				print("Repacking " + appName)
+				os.system("cat fileList.txt | pax -wd > " + appName +"-rest.tar")
+				#tar = tarfile.open(appName + "-rest.tar", "w", format=tarfile.USTAR_FORMAT)
+				#for name in ["apps"]:
+				#	tar.add(name)
+				#tar.close()
+				os.system("java -jar abe.jar pack " + appName + "-rest.tar " + appName + "-rest.ab")
+				cls()
+				print("Repacking complete.  You can now restore your backup file")
+			else:
+				print("You have not selected an app.  Please use option 1 to set your app.")
 	elif selection == "5":
 		cls()
+		
 		if appName:
 			print("Restoring " + appName)
 			os.system("adb.exe restore " + appName + "-rest.ab" if os.name == 'nt' else "adb restore " + appName + "-rest.ab")
 		else:
 			print("You have not selected an app.  Please use option 1 to set your app.")
 		
+	elif selection == "6":
+		cls()
+		appSelectMenu = {}
+		appSelectMenu['1']="Set Android Version 4.4.3+"
+		appSelectMenu['2']="Set Android Version Older than 4.4.3"
+		appSelectMenu['99']="Go Back"
+		while True:
+			options=appSelectMenu.keys()
+			options.sort()
+			for entry in options:
+				print entry, appSelectMenu[entry]
+			selection=raw_input("Please select an option to set your Android Version:")
+			if selection == "1":
+				cls()
+				andVer="pack-kk"
+				cls()
+				break
+			elif selection == "2":
+				cls()
+				andVer="pack"
+				cls()
+				break
+			elif selection == "99":
+				cls()
+				break	
+			else:
+				cls()
+				print("Invalid Selection")
+		cls()
+		
 	elif selection =="99":
 		cls()
 		print("Cleaning Up")
-		os.system("echo This is only supported on Linux or Cygwin currently" if os.name == 'nt' else "rm fileList.txt "+ appName + "*" if appName != '' else "echo ")
+		os.system("echo This is only supported on Linux or Cygwin currently" if os.name == 'nt' else "rm fileList.txt "+ appName + ".*" if appName != '' else "echo Nothing to remove")
 		os.system("echo This is only supported on Linux or Cygwin currently" if os.name == 'nt' else "rm -rf apps")
 		break
 	else:
