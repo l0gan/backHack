@@ -29,7 +29,8 @@ while True:
 		cls()
 		appSelectMenu = {}
 		appSelectMenu['1']="List Apps on Device"
-		appSelectMenu['2']="Type in App Name"
+		appSelectMenu['2']="Search for App"
+		appSelectMenu['3']="Type in App Name"
 		appSelectMenu['99']="Go Back"
 		while True:
 			options=appSelectMenu.keys()
@@ -43,6 +44,13 @@ while True:
 				os.system("adb.exe shell pm list packages" if os.name == 'nt' else "adb shell pm list packages")
 				print("Review the preceding list then use option 2 to type in the name of the package")
 			elif selection == "2":
+				cls()
+				appSearch=raw_input("Type in part of the name to search for: ")
+				print("")
+				os.system("adb shell pm list packages |  grep -i " + appSearch + " | cut -d: -f2")
+				print("")
+				print("Copy the name of the app you want and use selection 3 to specify the app you are hacking")
+			elif selection == "3":
 				cls()
 				appName=raw_input("Please type in the package name:")
 				cls()
