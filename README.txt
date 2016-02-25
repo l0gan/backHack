@@ -1,6 +1,6 @@
 
 
-backHack
+backHack 1.1
 
 by: Kirk Hayes(l0gan)
 Twitter:  @kirkphayes
@@ -9,9 +9,25 @@ To run:
 
 command:  python backHack.py
 
-Will be presented with menus.  Menu 1 will allow you to select an app name (Must use full name of package. & option 1 on sub menu does not currently work)  Menu 2 will backup the app.  Menu 3 will extract the backup so you can see the file system.  Menu 4 will repack the files into a file that can be restored.  Menu 5 will restore to device.  Menu 99 will exit.
 
-** adb must be installed and set in your PATH in Linux.  Windows will use the included adb.exe for now, and only works on Cygwin currently.  This should change in the future.  
+1 Select App Package
+2 Backup and Extract App
+3 Set Android Version
+4 Repack and Restore App
+99 Exit
+Please select an option:
+
+SUBMENU 1:
+1 List Apps on Device
+2 Search for App
+3 Type in App Name
+99 Go Back
+Please select an option:
+
+
+Android version will be selected automatically in the next release.
+
+** adb must be installed and set in your PATH in Linux.  Windows will use the included adb.exe for now (has not been tested fully).
 
 Use at your own risk!!
 
