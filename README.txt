@@ -1,6 +1,6 @@
 
 
-backHack 1.1
+backHack 1.2
 
 by: Kirk Hayes(l0gan)
 Twitter:  @kirkphayes
@@ -12,8 +12,7 @@ command:  python backHack.py
 
 1 Select App Package
 2 Backup and Extract App
-3 Set Android Version
-4 Repack and Restore App
+3 Repack and Restore App
 99 Exit
 Please select an option:
 
@@ -25,7 +24,6 @@ SUBMENU 1:
 Please select an option:
 
 
-Android version will be selected automatically in the next release.
 
 ** adb must be installed and set in your PATH in Linux.  Windows will use the included adb.exe for now (has not been tested fully).
 

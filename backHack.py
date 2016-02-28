@@ -1,6 +1,8 @@
 #! /bin/python
 import os
 import tarfile
+from distutils.version import StrictVersion
+import subprocess
 
 def cls():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -12,8 +14,7 @@ andVer = ''
 mainMenu = {}
 mainMenu['1']="Select App Package"
 mainMenu['2']="Backup and Extract App"
-mainMenu['3']="Set Android Version" #figure out android version for the user
-mainMenu['4']="Repack and Restore App"
+mainMenu['3']="Repack and Restore App"
 mainMenu['99']="Exit"
 cls()
 while True:
@@ -74,66 +75,42 @@ while True:
                 tarList.write(str(member.name) + '\n')
             tarList.close()
             tar.close()
-            #os.system("tar -tf " + appName + ".tar > fileList.txt")
-            #os.system("tar -xf " + appName + ".tar")
             print("Extraction Complete.  Please review files under Apps.")
         else:
             print("You have not selected an app.  Please use option 1 to set your app.")
+
     elif selection == "3":
         cls()
-        appSelectMenu = {}
-        appSelectMenu['1']="Set Android Version 4.4.3+"
-        appSelectMenu['2']="Set Android Version Older than 4.4.3"
-        appSelectMenu['99']="Go Back"
-        while True:
-            options=appSelectMenu.keys()
-            options.sort()
-            for entry in options:
-                print entry, appSelectMenu[entry]
-            selection=raw_input("Please select an option to set your Android Version:")
-            if selection == "1":
-                cls()
-                andVer="pack-kk"
-                cls()
-                break
-            elif selection == "2":
-                cls()
-                andVer="pack"
-                cls()
-                break
-            elif selection == "99":
-                cls()
-                break
-            else:
-                cls()
-                print("Invalid Selection")
-        cls()
-
-    elif selection == "4":
-        cls()
-        if andVer == '':
-            print("Please set your Android version before repacking")
+        andVerFile = open("andVerFile.txt", "w")
+        andVerNum = subprocess.check_output("adb.exe shell getprop ro.build.version.release" if os.name == 'nt' else "adb shell getprop ro.build.version.release", shell=True)
+        andVerFile.write(str(andVerNum)[:5])
+        andVerFile.close()
+        andVerFile = open("andVerFile.txt", "r")
+        andVerNum = andVerFile.read()
+        andVerFile.close()
+        if StrictVersion(str(andVerNum)) > StrictVersion("4.4.2"):
+            andVer = "pack-kk"
         else:
-            if appName:
-                print("Repacking " + appName)
-                #os.system("cat fileList.txt | pax -wd > " + appName +"-rest.tar")
-                tar = tarfile.open(appName + "-rest.tar", "w", format=tarfile.USTAR_FORMAT)
-                retar = open("fileList.txt", 'r')
-                for name in retar.readlines():
-                    tar.add(name.strip('\n'))
-                retar.close()
-                tar.close()
-                os.system("java -jar abe.jar "+ andVer + " " + appName + "-rest.tar " + appName + "-rest.ab")
-                cls()
-                print("Repacking complete.")
-                print("Restoring " + appName)
-                os.system("adb.exe restore " + appName + "-rest.ab" if os.name == 'nt' else "adb restore " + appName + "-rest.ab")
-            else:
-                print("You have not selected an app.  Please use option 1 to set your app.")
+            andVer = "pack"
+        if appName:
+            print("Repacking " + appName)
+            tar = tarfile.open(appName + "-rest.tar", "w", format=tarfile.USTAR_FORMAT)
+            retar = open("fileList.txt", 'r')
+            for name in retar.readlines():
+                tar.add(name.strip('\n'))
+            retar.close()
+            tar.close()
+            os.system("java -jar abe.jar "+ andVer + " " + appName + "-rest.tar " + appName + "-rest.ab")
+            cls()
+            print("Repacking complete.")
+            print("Restoring " + appName)
+            os.system("adb.exe restore " + appName + "-rest.ab" if os.name == 'nt' else "adb restore " + appName + "-rest.ab")
+        else:
+            print("You have not selected an app.  Please use option 1 to set your app.")
     elif selection =="99":
         cls()
         print("Cleaning Up")
-        os.system("echo This is only supported on Linux or Cygwin currently" if os.name == 'nt' else "rm fileList.txt "+ appName + ".* " + appName + "-*" if appName != '' else "echo Nothing to remove")
+        os.system("echo This is only supported on Linux or Cygwin currently" if os.name == 'nt' else "rm fileList.txt "+ appName + ".* " + appName + "-* andVerFile.txt" if appName != '' else "echo Nothing to remove")
         os.system("echo This is only supported on Linux or Cygwin currently" if os.name == 'nt' else "rm -rf apps")
         break
     else:
