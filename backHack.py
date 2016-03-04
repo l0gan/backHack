@@ -113,13 +113,8 @@ while True:
 
     elif selection == "3":
         cls()
-        #andVerFile = open("andVerFile.txt", "w")
         andVerNum = subprocess.check_output("adb.exe shell getprop ro.build.version.release" if os.name == 'nt' else "adb shell getprop ro.build.version.release", shell=True)
         andVerNum = str(andVerNum)[:5]
-        #andVerFile.close()
-        #andVerFile = open("andVerFile.txt", "r")
-        #andVerNum = andVerFile.read()
-        #andVerFile.close()
         if StrictVersion(str(andVerNum)) > StrictVersion("4.4.2"):
             andVer = "pack-kk"
         else:
@@ -142,8 +137,8 @@ while True:
     elif selection =="99":
         cls()
         print("Cleaning Up")
-        os.system("echo This is only supported on Linux or Cygwin currently" if os.name == 'nt' else "rm fileList.txt "+ appName + ".* " + appName + "-* " if appName != '' else "echo Nothing to remove")
-        os.system("echo This is only supported on Linux or Cygwin currently" if os.name == 'nt' else "rm -rf apps")
+        os.system("del fileList.txt "+ appName + ".* " + appName + "-* " if os.name == 'nt' else "rm fileList.txt "+ appName + ".* " + appName + "-* " if appName != '' else "echo Nothing to remove")
+        os.system("rd /S /Q apps" if os.name == 'nt' else "rm -rf apps")
         break
     else:
         cls()

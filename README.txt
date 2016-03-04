@@ -15,7 +15,7 @@
 
                                                                                     
 
-backHack 1.5
+backHack 1.6
 
 WINDOWS Support has been added!
 
