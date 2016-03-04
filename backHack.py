@@ -18,6 +18,22 @@ mainMenu['3']="Repack and Restore App"
 mainMenu['99']="Exit"
 cls()
 while True:
+    print """
+     /$$                           /$$       /$$   /$$                     /$$
+    | $$                          | $$      | $$  | $$                    | $$
+    | $$$$$$$   /$$$$$$   /$$$$$$$| $$   /$$| $$  | $$  /$$$$$$   /$$$$$$$| $$   /$$
+    | $$__  $$ |____  $$ /$$_____/| $$  /$$/| $$$$$$$$ |____  $$ /$$_____/| $$  /$$/
+    | $$  \ $$  /$$$$$$$| $$      | $$$$$$/ | $$__  $$  /$$$$$$$| $$      | $$$$$$/
+    | $$  | $$ /$$__  $$| $$      | $$_  $$ | $$  | $$ /$$__  $$| $$      | $$_  $$
+    | $$$$$$$/|  $$$$$$$|  $$$$$$$| $$ \  $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$ \  $$
+    |_______/  \_______/ \_______/|__/  \__/|__/  |__/ \_______/ \_______/|__/  \__/
+
+
+
+
+
+
+                                                                                    """
     options=mainMenu.keys()
     options.sort()
     for entry in options:
@@ -32,6 +48,22 @@ while True:
         appSelectMenu['3']="Type in App Name"
         appSelectMenu['99']="Go Back"
         while True:
+            print """
+     /$$                           /$$       /$$   /$$                     /$$
+    | $$                          | $$      | $$  | $$                    | $$
+    | $$$$$$$   /$$$$$$   /$$$$$$$| $$   /$$| $$  | $$  /$$$$$$   /$$$$$$$| $$   /$$
+    | $$__  $$ |____  $$ /$$_____/| $$  /$$/| $$$$$$$$ |____  $$ /$$_____/| $$  /$$/
+    | $$  \ $$  /$$$$$$$| $$      | $$$$$$/ | $$__  $$  /$$$$$$$| $$      | $$$$$$/
+    | $$  | $$ /$$__  $$| $$      | $$_  $$ | $$  | $$ /$$__  $$| $$      | $$_  $$
+    | $$$$$$$/|  $$$$$$$|  $$$$$$$| $$ \  $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$ \  $$
+    |_______/  \_______/ \_______/|__/  \__/|__/  |__/ \_______/ \_______/|__/  \__/
+
+
+
+
+
+
+                                                                                    """
             options=appSelectMenu.keys()
             options.sort()
             for entry in options:
@@ -46,7 +78,7 @@ while True:
                 cls()
                 appSearch=raw_input("Type in part of the name to search for: ")
                 print("")
-                os.system("adb shell pm list packages |  grep -i " + appSearch + " | cut -d: -f2")
+                os.system('adb shell pm list packages | find /I "' + appSearch + '"' if os.name == 'nt' else "adb shell pm list packages |  grep -i " + appSearch + " | cut -d: -f2")
                 print("")
                 print("Copy the name of the app you want and use selection 3 to specify the app you are hacking")
             elif selection == "3":
@@ -81,13 +113,13 @@ while True:
 
     elif selection == "3":
         cls()
-        andVerFile = open("andVerFile.txt", "w")
+        #andVerFile = open("andVerFile.txt", "w")
         andVerNum = subprocess.check_output("adb.exe shell getprop ro.build.version.release" if os.name == 'nt' else "adb shell getprop ro.build.version.release", shell=True)
-        andVerFile.write(str(andVerNum)[:5])
-        andVerFile.close()
-        andVerFile = open("andVerFile.txt", "r")
-        andVerNum = andVerFile.read()
-        andVerFile.close()
+        andVerNum = str(andVerNum)[:5]
+        #andVerFile.close()
+        #andVerFile = open("andVerFile.txt", "r")
+        #andVerNum = andVerFile.read()
+        #andVerFile.close()
         if StrictVersion(str(andVerNum)) > StrictVersion("4.4.2"):
             andVer = "pack-kk"
         else:
@@ -110,7 +142,7 @@ while True:
     elif selection =="99":
         cls()
         print("Cleaning Up")
-        os.system("echo This is only supported on Linux or Cygwin currently" if os.name == 'nt' else "rm fileList.txt "+ appName + ".* " + appName + "-* andVerFile.txt" if appName != '' else "echo Nothing to remove")
+        os.system("echo This is only supported on Linux or Cygwin currently" if os.name == 'nt' else "rm fileList.txt "+ appName + ".* " + appName + "-* " if appName != '' else "echo Nothing to remove")
         os.system("echo This is only supported on Linux or Cygwin currently" if os.name == 'nt' else "rm -rf apps")
         break
     else:

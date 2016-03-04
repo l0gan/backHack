@@ -1,6 +1,23 @@
 
+            /$$                           /$$       /$$   /$$                     /$$
+            | $$                          | $$      | $$  | $$                    | $$
+            | $$$$$$$   /$$$$$$   /$$$$$$$| $$   /$$| $$  | $$  /$$$$$$   /$$$$$$$| $$   /$$
+            | $$__  $$ |____  $$ /$$_____/| $$  /$$/| $$$$$$$$ |____  $$ /$$_____/| $$  /$$/
+            | $$  \ $$  /$$$$$$$| $$      | $$$$$$/ | $$__  $$  /$$$$$$$| $$      | $$$$$$/
+            | $$  | $$ /$$__  $$| $$      | $$_  $$ | $$  | $$ /$$__  $$| $$      | $$_  $$
+            | $$$$$$$/|  $$$$$$$|  $$$$$$$| $$ \  $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$ \  $$
+            |_______/  \_______/ \_______/|__/  \__/|__/  |__/ \_______/ \_______/|__/  \__/   
+            
+            
+            
+            
+            
 
-backHack 1.2
+                                                                                    
+
+backHack 1.5
+
+WINDOWS Support has been added!
 
 by: Kirk Hayes(l0gan)
 Twitter:  @kirkphayes
@@ -25,7 +42,7 @@ Please select an option:
 
 
 
-** adb must be installed and set in your PATH in Linux.  Windows will use the included adb.exe for now (has not been tested fully).
+** adb must be installed and set in your PATH.
 
 Use at your own risk!!
 
