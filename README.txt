@@ -15,14 +15,21 @@
 
                                                                                     
 
-backHack 1.6
+backHack 2.0
 
-WINDOWS Support has been added!
+v2.0: Run straight from the command line!
+v1.6: WINDOWS Support has been added!
 
 by: Kirk Hayes(l0gan)
 Twitter:  @kirkphayes
 
-To run:
+To run from command line (new in v2.0):
+
+command:  python backHack.py --app com.app.android
+            --app APPNAME, -a APPNAME (name of app to backup/analyze/restore)
+            --listapps, -l (List apps installed on device)
+
+To run interactively:
 
 command:  python backHack.py
 
