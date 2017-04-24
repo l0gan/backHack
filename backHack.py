@@ -101,6 +101,7 @@ def mainmenu():
                     print("")
                     appnumber = raw_input("[*] Enter number corresponding with the app you want to use: ")
                     appName = packs[int(appnumber)]
+                    appName = appName.strip("\n")
                     cls()
                     print("[!] Your chosen app:  " + appName)
                     break
