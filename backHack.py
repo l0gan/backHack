@@ -183,15 +183,22 @@ def backupApp(appName):
     print("[*] Backing up " + appName)
     os.system("adb.exe backup -f " + appName + ".ab " + appName if os.name == 'nt' else "adb backup -f " + appName + ".ab " + appName)
     print("[*] Extracting " + appName + ".")
-    os.system("java -jar abe.jar unpack " + appName + ".ab " + appName + ".tar")
-    tar = tarfile.open(appName + ".tar")
-    tar.extractall()
-    tarList = open("fileList.txt", 'w')
-    for member in tar.getmembers():
-        tarList.write(str(member.name) + '\n')
-        tarList.close()
-    tar.close()
-    print("[*] Extraction Complete.  Please review files under apps folder.")
+    try:
+        os.system("java -jar abe.jar unpack " + appName + ".ab " + appName + ".tar")
+        tar = tarfile.open(appName + ".tar")
+        tar.extractall()
+        tarList = open("fileList.txt", 'w')
+        for member in tar.getmembers():
+            tarList.write(str(member.name) + '\n')
+            tarList.close()
+        statinfo = os.stat('fileList.txt')
+        if statinfo.st_size == 0:
+            print("[-] Extraction failed. Did the backup complete properly? Try again but use a password to encrypt.")
+        else:
+            print("[*] Extraction Complete.  Please review files under apps folder.")
+    except Exception as e:
+        print("[-] An error occured. Are you encrpyting? ")
+        print e
 
 def main():
     cls()
