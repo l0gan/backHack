@@ -15,8 +15,9 @@
 
                                                                                     
 
-backHack 2.0
+backHack 2.5
 
+v2.5: Allow for easier app selection.
 v2.0: Run straight from the command line!
 v1.6: WINDOWS Support has been added!
 
@@ -50,6 +51,8 @@ Please select an option:
 
 
 ** adb must be installed and set in your PATH.
+*** If using a password on your backups, you must have Java JCE Unlimited Strength Jurisdiction Policy installed (http://www.oracle.com/technetwork/java/javase/downloads/jce-7-download-432124.html)
+**** On Google Pixel you may HAVE to use encryption.
 
 Use at your own risk!!
 
