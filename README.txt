@@ -6,17 +6,18 @@
             | $$  \ $$  /$$$$$$$| $$      | $$$$$$/ | $$__  $$  /$$$$$$$| $$      | $$$$$$/
             | $$  | $$ /$$__  $$| $$      | $$_  $$ | $$  | $$ /$$__  $$| $$      | $$_  $$
             | $$$$$$$/|  $$$$$$$|  $$$$$$$| $$ \  $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$ \  $$
-            |_______/  \_______/ \_______/|__/  \__/|__/  |__/ \_______/ \_______/|__/  \__/   
-            
-            
-            
-            
-            
+            |_______/  \_______/ \_______/|__/  \__/|__/  |__/ \_______/ \_______/|__/  \__/
 
-                                                                                    
 
-backHack 2.5
 
+
+
+
+
+
+backHack 3.0
+
+v3.0: iOS Backup Parsing!
 v2.5: Allow for easier app selection.
 v2.0: Run straight from the command line!
 v1.6: WINDOWS Support has been added!
@@ -29,6 +30,9 @@ To run from command line (new in v2.0):
 command:  python backHack.py --app com.app.android
             --app APPNAME, -a APPNAME (name of app to backup/analyze/restore)
             --listapps, -l (List apps installed on device)
+
+NEW: iOS Mode (1):
+          python backHack.py --ios --app appname (iOS mode. Specify app name and backHack will parse all backups from iTunes for which files may be of interest)
 
 To run interactively:
 
@@ -48,11 +52,10 @@ SUBMENU 1:
 99 Go Back
 Please select an option:
 
-
+(1): Have not tested encrypted backups yet....
 
 ** adb must be installed and set in your PATH.
 *** If using a password on your backups, you must have Java JCE Unlimited Strength Jurisdiction Policy installed (http://www.oracle.com/technetwork/java/javase/downloads/jce-7-download-432124.html)
 **** On Google Pixel you may HAVE to use encryption.
 
 Use at your own risk!!
-
