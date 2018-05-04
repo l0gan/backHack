@@ -20,8 +20,9 @@ parser.add_argument('--listapps', '-l', action="store_true", help='List apps on 
 parser.add_argument('--backup', '-b', action="store_true", help='Backup app')
 parser.add_argument('--restore', '-r', action="store_true", help='Restore app')
 parser.add_argument('--ios', '-i', action="store_true", help='iOS mode. Uses a iTunes backup file to extract data from the specified app.')
+parser.add_argument('--apk', action="store_true", help='Download App APK')
 
-ver = "3.0"
+ver = "3.1"
 
 def cls():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -136,6 +137,11 @@ def mainmenu():
         else:
             cls()
             print("[-] Invalid Selection")
+
+def apkDownloader(appName):
+    apkLoc = check_output('adb shell pm list packages -f | find /I "' + appName + '"' if os.name == 'nt' else "adb shell pm list packages -f |  grep -i " + appName , shell=True)
+    apkLoc = (apkLoc.split(':')[1]).split('=')[0]
+    os.system('adb pull ' + apkLoc + ' ' + appName + '.apk') 
 
 def andVerCheck():
     andVerNum = subprocess.check_output("adb.exe shell getprop ro.build.version.release" if os.name == 'nt' else "adb shell getprop ro.build.version.release", shell=True)
@@ -265,6 +271,8 @@ if __name__ == '__main__':
                 cleanup(args.app)
             else:
                 print("[-] Leaving artifacts as they are. Manually cleanup if you need.")
+        elif args.apk:
+            apkDownloader(args.app)
         else:
             print "[-] Missing backup or restore argument."
     elif args.listapps == True:

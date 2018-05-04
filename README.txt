@@ -15,8 +15,8 @@
 
 
 
-backHack 3.0
-
+backHack 3.1
+v3.1: Download APK from device
 v3.0: iOS Backup Parsing!
 v2.5: Allow for easier app selection.
 v2.0: Run straight from the command line!
@@ -31,8 +31,11 @@ command:  python backHack.py --app com.app.android
             --app APPNAME, -a APPNAME (name of app to backup/analyze/restore)
             --listapps, -l (List apps installed on device)
 
-NEW: iOS Mode (1):
+iOS Mode (1):
           python backHack.py --ios --app appname (iOS mode. Specify app name and backHack will parse all backups from iTunes for which files may be of interest)
+
+NEW: To download APK:
+          python backHack.py --app appname --apk (will save the apk with the name of the app you enter)
 
 To run interactively:
 
