@@ -1,21 +1,50 @@
 #! /usr/bin/python
 import os
+from os.path import expanduser
 import tarfile
 from distutils.version import LooseVersion
 import subprocess
 from subprocess import check_output
 from argparse import ArgumentParser
+import platform
+import time
+from datetime import datetime
+import pytz
+import glob
+import sqlite3
+
 
 parser = ArgumentParser(description='Hacking some Android apps! Use backHack to perform Android Application File System Analysis on non-rooted devices. Running without arguments will run in interactive mode.')
 parser.add_argument('--app', '-a', help='Application name (e.g. com.niantic.pokemongo)')
 parser.add_argument('--listapps', '-l', action="store_true", help='List apps on device')
 parser.add_argument('--backup', '-b', action="store_true", help='Backup app')
 parser.add_argument('--restore', '-r', action="store_true", help='Restore app')
+parser.add_argument('--ios', '-i', action="store_true", help='iOS mode. Uses a iTunes backup file to extract data from the specified app.')
+parser.add_argument('--apk', action="store_true", help='Download App APK')
 
-
+ver = "3.1"
 
 def cls():
     os.system('cls' if os.name == 'nt' else 'clear')
+
+def logo():
+    print("""
+/$$                           /$$       /$$   /$$                     /$$
+| $$                          | $$      | $$  | $$                    | $$
+| $$$$$$$   /$$$$$$   /$$$$$$$| $$   /$$| $$  | $$  /$$$$$$   /$$$$$$$| $$   /$$
+| $$__  $$ |____  $$ /$$_____/| $$  /$$/| $$$$$$$$ |____  $$ /$$_____/| $$  /$$/
+| $$  \ $$  /$$$$$$$| $$      | $$$$$$/ | $$__  $$  /$$$$$$$| $$      | $$$$$$/
+| $$  | $$ /$$__  $$| $$      | $$_  $$ | $$  | $$ /$$__  $$| $$      | $$_  $$
+| $$$$$$$/|  $$$$$$$|  $$$$$$$| $$ \  $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$ \  $$
+|_______/  \_______/ \_______/|__/  \__/|__/  |__/ \_______/ \_______/|__/  \__/
+
+                                                                    Version: """ + ver + """
+
+
+
+
+
+""")
 
 def mainmenu():
     appName = ''
@@ -27,22 +56,7 @@ def mainmenu():
     mainMenu['99']="Exit"
     cls()
     while True:
-        print("""
-         /$$                           /$$       /$$   /$$                     /$$
-        | $$                          | $$      | $$  | $$                    | $$
-        | $$$$$$$   /$$$$$$   /$$$$$$$| $$   /$$| $$  | $$  /$$$$$$   /$$$$$$$| $$   /$$
-        | $$__  $$ |____  $$ /$$_____/| $$  /$$/| $$$$$$$$ |____  $$ /$$_____/| $$  /$$/
-        | $$  \ $$  /$$$$$$$| $$      | $$$$$$/ | $$__  $$  /$$$$$$$| $$      | $$$$$$/
-        | $$  | $$ /$$__  $$| $$      | $$_  $$ | $$  | $$ /$$__  $$| $$      | $$_  $$
-        | $$$$$$$/|  $$$$$$$|  $$$$$$$| $$ \  $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$ \  $$
-        |_______/  \_______/ \_______/|__/  \__/|__/  |__/ \_______/ \_______/|__/  \__/
-
-
-
-
-
-
-                                                                                        """)
+        logo()
         options=mainMenu.keys()
         options.sort()
         for entry in options:
@@ -57,22 +71,7 @@ def mainmenu():
             appSelectMenu['3']="Type in App Name"
             appSelectMenu['99']="Go Back"
             while True:
-                print("""
-         /$$                           /$$       /$$   /$$                     /$$
-        | $$                          | $$      | $$  | $$                    | $$
-        | $$$$$$$   /$$$$$$   /$$$$$$$| $$   /$$| $$  | $$  /$$$$$$   /$$$$$$$| $$   /$$
-        | $$__  $$ |____  $$ /$$_____/| $$  /$$/| $$$$$$$$ |____  $$ /$$_____/| $$  /$$/
-        | $$  \ $$  /$$$$$$$| $$      | $$$$$$/ | $$__  $$  /$$$$$$$| $$      | $$$$$$/
-        | $$  | $$ /$$__  $$| $$      | $$_  $$ | $$  | $$ /$$__  $$| $$      | $$_  $$
-        | $$$$$$$/|  $$$$$$$|  $$$$$$$| $$ \  $$| $$  | $$|  $$$$$$$|  $$$$$$$| $$ \  $$
-        |_______/  \_______/ \_______/|__/  \__/|__/  |__/ \_______/ \_______/|__/  \__/
-
-
-
-
-
-
-                                                                                        """)
+                logo()
                 options=appSelectMenu.keys()
                 options.sort()
                 for entry in options:
@@ -139,6 +138,11 @@ def mainmenu():
             cls()
             print("[-] Invalid Selection")
 
+def apkDownloader(appName):
+    apkLoc = check_output('adb shell pm list packages -f | find /I "' + appName + '"' if os.name == 'nt' else "adb shell pm list packages -f |  grep -i " + appName , shell=True)
+    apkLoc = (apkLoc.split(':')[1]).split('=')[0]
+    os.system('adb pull ' + apkLoc + ' ' + appName + '.apk') 
+
 def andVerCheck():
     andVerNum = subprocess.check_output("adb.exe shell getprop ro.build.version.release" if os.name == 'nt' else "adb shell getprop ro.build.version.release", shell=True)
     andVerNum = str(andVerNum)[:5]
@@ -204,12 +208,59 @@ def main():
     cls()
     mainmenu()
 
+def iosBackup(itunesdir):
+    try:
+        newest = max(glob.iglob(itunesdir + '/*'), key=os.path.getctime)
+        conn = sqlite3.connect(newest + '/Manifest.db')
+        c = conn.cursor()
+        print "[+] Files accessible: (" + newest + ")"
+        print "+" + "-" * 120 + "+"
+        print "|  " + "GUID".ljust(50) + "|  " + "LocalDB".ljust(65) + "|"
+        print "+" + "-" * 120 + "+"
+        sqlcmd = "SELECT DISTINCT fileID, domain, relativePath  from Files WHERE domain LIKE '%" + args.app + "%';"
+        #sqlcmd = "SELECT * from Files"
+        for row in c.execute(sqlcmd):
+            if "." in row[2]:
+                filename = newest + "/" + row[0][:2]
+                total_size = 0
+                for dirpath, dirnames, filenames in os.walk(filename):
+                    for f in filenames:
+                        fp = os.path.join(dirpath, f)
+                        total_size += os.path.getsize(fp)
+                        if total_size > 65:
+                            print "|",row[0].ljust(50), "|", row[2].ljust(65), "|"
+        print "+" + "-" * 120 + "+"
+    except ValueError:
+        print "[-] No Backups found. Have you performed a backup with iTunes?"
+
 if __name__ == '__main__':
     args = parser.parse_args()
     parser.set_defaults(listapps=False)
     parser.set_defaults(backup=False)
     parser.set_defaults(restore=False)
-    if args.app:
+    osType =  platform.system()
+    home = expanduser("~")
+    if args.ios:
+        cls()
+        logo()
+        print "[*] Let's try some iOS fun...."
+        macDir = home + '/Library/Application Support/MobileSync/Backup/'
+        winDir = home + r'\AppData\Roaming\Apple Computer\MobileSync\Backup'
+        if osType == "Darwin":
+            print "[*] Running on a Mac huh?"
+            print "[*] Looking for backup data at: " + macDir
+            itunesdir = macDir
+            iosBackup(itunesdir)
+        elif osType == "Windows":
+            print "[*] Ugh, Windows huh?"
+            print "[*] Looking for backup data at: " + winDir
+            itunesdir = winDir
+            iosBackup(itunesdir)
+        elif osType == "Linux":
+            print "[-] iOS on Linux? Are you nuts? iTunes doesn't work on Linux! Go grab a Mac or a Windows system..."
+        else:
+            print "[-] I don't know what this is: " + osType
+    elif args.app:
         if args.backup:
             backupApp(args.app)
         elif args.restore:
@@ -220,6 +271,8 @@ if __name__ == '__main__':
                 cleanup(args.app)
             else:
                 print("[-] Leaving artifacts as they are. Manually cleanup if you need.")
+        elif args.apk:
+            apkDownloader(args.app)
         else:
             print "[-] Missing backup or restore argument."
     elif args.listapps == True:
