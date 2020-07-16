@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 import os
 from os.path import expanduser
 import tarfile
@@ -9,7 +9,7 @@ from argparse import ArgumentParser
 import platform
 import time
 from datetime import datetime
-import pytz
+#import pytz
 import glob
 import sqlite3
 
@@ -58,11 +58,11 @@ def mainmenu():
     while True:
         logo()
         options=mainMenu.keys()
-        options.sort()
+        #options.sort()
         for entry in options:
             print(entry, mainMenu[entry])
 
-        selection=raw_input("[*]  Please select an option:  ")
+        selection=input("[*]  Please select an option:  ")
         if selection == "1":
             cls()
             appSelectMenu = {}
@@ -73,32 +73,32 @@ def mainmenu():
             while True:
                 logo()
                 options=appSelectMenu.keys()
-                options.sort()
+                #options.sort()
                 for entry in options:
                     print(entry, appSelectMenu[entry])
 
-                selection=raw_input("[*]  Please select an option:  ")
+                selection=input("[*]  Please select an option:  ")
                 if selection == "1":
                     cls()
                     packs = listApps()
-                    appnumber = raw_input("[*] Enter number corresponding with the app you want to use: ")
+                    appnumber = input("[*] Enter number corresponding with the app you want to use: ")
                     appName = packs[int(appnumber)]
                     cls()
                     print("[!] Your chosen app:  " + appName)
                     break
                 elif selection == "2":
                     cls()
-                    appSearch=raw_input("[*]  Type in part of the name to search for: ")
+                    appSearch=input("[*]  Type in part of the name to search for: ")
                     print("")
                     packs = check_output('adb shell pm list packages | find /I "' + appSearch + '"' if os.name == 'nt' else "adb shell pm list packages |  grep -i " + appSearch + " | cut -d: -f2", shell=True)
                     packs = packs.split(":")
                     packs = [i.split('\r\n', 1)[0] for i in packs]
                     i = 0
                     for pack in packs:
-                        print str(i) + ": " + pack
+                        print(str(i) + ": " + pack)
                         i = i+1
                     print("")
-                    appnumber = raw_input("[*] Enter number corresponding with the app you want to use: ")
+                    appnumber = input("[*] Enter number corresponding with the app you want to use: ")
                     appName = packs[int(appnumber)]
                     appName = appName.strip("\n")
                     cls()
@@ -106,7 +106,7 @@ def mainmenu():
                     break
                 elif selection == "3":
                     cls()
-                    appName=raw_input("[*]  Please type in the package name:")
+                    appName=input("[*]  Please type in the package name:")
                     cls()
                     print("[!] Your chosen app:  " + appName)
                     break
@@ -173,12 +173,14 @@ def cleanup(appName):
 
 def listApps():
     packs = check_output("adb.exe shell pm list packages" if os.name == 'nt' else "adb shell pm list packages", shell=True)
+    print(packs)
     #packs = os.popen("adb.exe shell pm list packages" if os.name == 'nt' else "adb shell pm list packages").read()
-    packs = packs.split(":")
-    packs = [i.split('\r\n', 1)[0] for i in packs]
+    packs = str(packs).split(":")
+    packs = [i.replace('\\r\\npackage', '', 1000) for i in packs]
+    packs = [i.replace('\\r\\n', '', 1000) for i in packs]
     i = 0
     for pack in packs:
-        print str(i) + ": " + pack
+        print(str(i) + ": " + pack)
         i = i+1
     return packs
 
@@ -202,7 +204,7 @@ def backupApp(appName):
             print("[*] Extraction Complete.  Please review files under apps folder.")
     except Exception as e:
         print("[-] An error occured. Are you encrpyting? ")
-        print e
+        print(e)
 
 def main():
     cls()
@@ -213,10 +215,10 @@ def iosBackup(itunesdir):
         newest = max(glob.iglob(itunesdir + '/*'), key=os.path.getctime)
         conn = sqlite3.connect(newest + '/Manifest.db')
         c = conn.cursor()
-        print "[+] Files accessible: (" + newest + ")"
-        print "+" + "-" * 120 + "+"
-        print "|  " + "GUID".ljust(50) + "|  " + "LocalDB".ljust(65) + "|"
-        print "+" + "-" * 120 + "+"
+        print("[+] Files accessible: (" + newest + ")")
+        print("+" + "-" * 120 + "+")
+        print("|  " + "GUID".ljust(50) + "|  " + "LocalDB".ljust(65) + "|")
+        print("+" + "-" * 120 + "+")
         sqlcmd = "SELECT DISTINCT fileID, domain, relativePath  from Files WHERE domain LIKE '%" + args.app + "%';"
         #sqlcmd = "SELECT * from Files"
         for row in c.execute(sqlcmd):
@@ -228,10 +230,10 @@ def iosBackup(itunesdir):
                         fp = os.path.join(dirpath, f)
                         total_size += os.path.getsize(fp)
                         if total_size > 65:
-                            print "|",row[0].ljust(50), "|", row[2].ljust(65), "|"
-        print "+" + "-" * 120 + "+"
+                            print("|",row[0].ljust(50), "|", row[2].ljust(65), "|")
+        print("+" + "-" * 120 + "+")
     except ValueError:
-        print "[-] No Backups found. Have you performed a backup with iTunes?"
+        print("[-] No Backups found. Have you performed a backup with iTunes?")
 
 if __name__ == '__main__':
     args = parser.parse_args()
@@ -243,30 +245,30 @@ if __name__ == '__main__':
     if args.ios:
         cls()
         logo()
-        print "[*] Let's try some iOS fun...."
+        print("[*] Let's try some iOS fun....")
         macDir = home + '/Library/Application Support/MobileSync/Backup/'
         winDir = home + r'\AppData\Roaming\Apple Computer\MobileSync\Backup'
         if osType == "Darwin":
-            print "[*] Running on a Mac huh?"
-            print "[*] Looking for backup data at: " + macDir
+            print("[*] Running on a Mac huh?")
+            print("[*] Looking for backup data at: " + macDir)
             itunesdir = macDir
             iosBackup(itunesdir)
         elif osType == "Windows":
-            print "[*] Ugh, Windows huh?"
-            print "[*] Looking for backup data at: " + winDir
+            print("[*] Ugh, Windows huh?")
+            print("[*] Looking for backup data at: " + winDir)
             itunesdir = winDir
             iosBackup(itunesdir)
         elif osType == "Linux":
-            print "[-] iOS on Linux? Are you nuts? iTunes doesn't work on Linux! Go grab a Mac or a Windows system..."
+            print("[-] iOS on Linux? Are you nuts? iTunes doesn't work on Linux! Go grab a Mac or a Windows system...")
         else:
-            print "[-] I don't know what this is: " + osType
+            print("[-] I don't know what this is: " + osType)
     elif args.app:
         if args.backup:
             backupApp(args.app)
         elif args.restore:
             andVer = andVerCheck()
             restoreApp(andVer, args.app)
-            cleanup = raw_input("[*]  Would you like to cleanup? WARNING: This will DELETE all folders associated with the application backup/restore process. (y/n)")
+            cleanup = input("[*]  Would you like to cleanup? WARNING: This will DELETE all folders associated with the application backup/restore process. (y/n)")
             if cleanup == "y":
                 cleanup(args.app)
             else:
@@ -274,7 +276,7 @@ if __name__ == '__main__':
         elif args.apk:
             apkDownloader(args.app)
         else:
-            print "[-] Missing backup or restore argument."
+            print("[-] Missing backup or restore argument.")
     elif args.listapps == True:
         listApps()
     else:
